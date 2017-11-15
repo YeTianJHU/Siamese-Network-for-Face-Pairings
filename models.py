@@ -54,14 +54,14 @@ class SIAMESE(nn.Module):
     def forward(self, input1, input2):
         output1 = self.forward_once(input1)
         output2 = self.forward_once(input2)
-        concated = torch.cat((output1, output2)).view(-1, 2048)
+        concated = torch.cat((output1, output2),1)
         output = self.fc2(concated)
         output = torch.sigmoid(output)
         return output
 
 class SIAMESE2(nn.Module):
     def __init__(self):
-        super(SIAMESE, self).__init__()
+        super(SIAMESE2, self).__init__()
         self.conv1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size = (5,5), stride = (1,1), padding = 2),
             nn.ReLU(inplace=True),
@@ -91,10 +91,7 @@ class SIAMESE2(nn.Module):
             nn.ReLU(inplace=True),
             nn.BatchNorm2d(1024),
         )
-        
-        self.fc2 = nn.Linear(2048, 1)
-   
-    
+            
     def forward_once(self, x):
          output = self.conv1(x)
          output = self.conv2(output)
